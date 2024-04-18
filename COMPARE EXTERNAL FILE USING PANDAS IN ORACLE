@@ -1,0 +1,22 @@
+import cx_Oracle
+import pandas as pd
+
+# Specify the path to your file and the Oracle database connection details
+file_path = 'your_file.csv'  # replace with your file path
+dsn_tns = cx_Oracle.makedsn('hostname', 'port', service_name='service_name')  # replace with your details
+conn = cx_Oracle.connect(user='username', password='password', dsn=dsn_tns)  # replace with your details
+
+# Read the file into a pandas DataFrame
+df_file = pd.read_csv(file_path)
+
+# Query the target table from the database into a pandas DataFrame
+df_db = pd.read_sql_query("SELECT * FROM target_table", conn)  # replace 'target_table' with your table name
+
+# Close the connection to the database
+conn.close()
+
+# Compare the two DataFrames
+comparison = df_file.compare(df_db)
+
+# Print the comparison result
+print(comparison)
