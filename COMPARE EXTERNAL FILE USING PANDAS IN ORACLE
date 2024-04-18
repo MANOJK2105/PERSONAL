@@ -1,7 +1,11 @@
+TYPE 1
+
+
 import cx_Oracle
 import pandas as pd
 
 # Specify the path to your file and the Oracle database connection details
+
 file_path = 'your_file.csv'  # replace with your file path
 dsn_tns = cx_Oracle.makedsn('hostname', 'port', service_name='service_name')  # replace with your details
 conn = cx_Oracle.connect(user='username', password='password', dsn=dsn_tns)  # replace with your details
@@ -20,3 +24,31 @@ comparison = df_file.compare(df_db)
 
 # Print the comparison result
 print(comparison)
+
+
+TYPE 2:
+
+import pandas as pd
+import cx_Oracle
+
+# Database connection details
+dsn = cx_Oracle.makedsn('hostname', 'port', 'service_name')
+connection = cx_Oracle.connect('username', 'password', dsn)
+
+# Read data from CSV file
+file_path = 'local_file.csv'
+local_df = pd.read_csv(file_path)
+
+# Read data from target database table
+query = 'SELECT * FROM target_table'
+db_df = pd.read_sql(query, connection)
+
+# Compare data
+if local_df.equals(db_df):
+    print("Data in the file matches the data in the target database.")
+else:
+    print("Data in the file does not match the data in the target database.")
+
+# Close database connection
+connection.close()
+
